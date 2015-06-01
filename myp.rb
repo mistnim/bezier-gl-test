@@ -177,14 +177,4 @@ class Lesson3
   end
 end
 
-
-# a = Vector.[] 0.0,0.0
-# b = Vector.[] 1.0,1.0
-# c = Vector.[] 2.0,1.0
-# d = Vector.[] 3.0,0.0
-# cc = [a,b,c,d]
-# curve = Curve.new *cc
-# curve.draw
-
-
 Lesson3.new
