@@ -32,14 +32,14 @@ class Curve
   def draw_segment curve
     glDisable GL_LIGHTING
     glLineWidth 2
-    glBegin GL_LINES
-    glVertex3f curve[0].[](0), curve[0].[](1) ,0
-    glVertex3f curve[1].[](0), curve[1].[](1) ,0
-    glVertex3f curve[1].[](0), curve[1].[](1) ,0
-    glVertex3f curve[2].[](0), curve[2].[](1) ,0
-    glVertex3f curve[2].[](0), curve[2].[](1) ,0
-    glVertex3f curve[3].[](0), curve[3].[](1) ,0
-    glEnd
+    glBegin GL_LINES do
+      glVertex3f curve[0].[](0), curve[0].[](1) ,0
+      glVertex3f curve[1].[](0), curve[1].[](1) ,0
+      glVertex3f curve[1].[](0), curve[1].[](1) ,0
+      glVertex3f curve[2].[](0), curve[2].[](1) ,0
+      glVertex3f curve[2].[](0), curve[2].[](1) ,0
+      glVertex3f curve[3].[](0), curve[3].[](1) ,0
+    end
     glEnable GL_LIGHTING
   end
   
