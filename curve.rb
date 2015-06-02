@@ -5,17 +5,22 @@ require 'matrix'
 class Curve
   def initialize p1, p2, p3, p4
     @curve = [p1, p2, p3, p4]
+    @segments = []
+    draw_curve @curve
   end
 
   def draw
-    draw_curve @curve
+    glDisable GL_LIGHTING
+    glLineWidth 2
+    @segments.each {|c| draw_segment c }
+    glEnable GL_LIGHTING
   end
 
   private
   
   def draw_curve curve
     if is_flat? curve
-      draw_segment curve
+      @segments << curve
     else
       pieces = subdivide curve
       draw_curve pieces[0]
@@ -24,8 +29,6 @@ class Curve
   end
 
   def draw_segment curve
-    glDisable GL_LIGHTING
-    glLineWidth 2
     glBegin GL_LINES do
       glVertex3f curve[0].[](0), curve[0].[](1) ,0
       glVertex3f curve[1].[](0), curve[1].[](1) ,0
@@ -34,7 +37,6 @@ class Curve
       glVertex3f curve[2].[](0), curve[2].[](1) ,0
       glVertex3f curve[3].[](0), curve[3].[](1) ,0
     end
-    glEnable GL_LIGHTING
   end
   
   def is_flat? curve
