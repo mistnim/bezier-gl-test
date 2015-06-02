@@ -113,9 +113,6 @@ class Lesson3
       glPushMatrix do
         glTranslatef 0,0,5
         glRotatef 90, 1,0,0
-        @curve.move
-        @curve.draw
-        glRotatef @a, 0,1,0
         @curve.draw
       end
 

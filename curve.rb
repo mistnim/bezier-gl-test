@@ -11,12 +11,6 @@ class Curve
     draw_curve @curve
   end
 
-  def move
-    v = -0.05
-    @curve[0] += Vector.[]v,0
-    @curve[1] += Vector.[]v,v
-  end
-  
   private
   
   def draw_curve curve
