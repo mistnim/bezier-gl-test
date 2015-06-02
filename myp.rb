@@ -96,9 +96,11 @@ class Lesson3
     glClear GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
 
     glPushMatrix do
-      glRotate -90, 1, 0, 0
-      glTranslatef 0.0, 80.0, -3.0
 
+      glRotate -90, 1, 0, 0
+
+      glTranslatef 0.0, 80.0, -3.0
+      glRotate @a, 0, 0, 1
       glPushMatrix do
         glLightfv GL_LIGHT0, GL_POSITION, [2,-2,2,1]
       end
@@ -113,7 +115,10 @@ class Lesson3
       glPushMatrix do
         glTranslatef 0,0,5
         glRotatef 90, 1,0,0
-        @curve.draw
+        60.times do
+          glTranslatef 0,0,1
+          glCallList @index
+        end
       end
 
       glPushMatrix do
@@ -169,7 +174,12 @@ class Lesson3
     glutDisplayFunc :draw_gl_scene
     glutReshapeFunc :reshape
     glutKeyboardFunc :keyboard
+
+    @index = glGenLists 1
+    @curve.compile_list @index
+
     init_gl_window WIDTH, HEIGHT
+    
     glutMainLoop
   end
 end

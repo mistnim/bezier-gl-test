@@ -9,11 +9,13 @@ class Curve
     draw_curve @curve
   end
 
-  def draw
+  def compile_list index
+    glNewList(index, GL_COMPILE)
     glDisable GL_LIGHTING
     glLineWidth 2
     @segments.each {|c| draw_segment c }
     glEnable GL_LIGHTING
+    glEndList
   end
 
   private
