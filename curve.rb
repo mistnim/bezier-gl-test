@@ -5,16 +5,11 @@ require 'matrix'
 class Curve
   def initialize p1, p2, p3, p4
     @curve = [p1, p2, p3, p4]
-    @segments = []
-    draw_curve @curve
   end
 
-
-  private
-  
-  def draw_curve curve
+  def self.draw_curve curve
     if is_flat? curve
-      @segments << curve
+      draw_segment curve
     else
       pieces = subdivide curve
       draw_curve pieces[0]
@@ -22,7 +17,9 @@ class Curve
     end
   end
 
-  def draw_segment curve
+  private
+  
+  def self.draw_segment curve
     glBegin GL_LINES do
       glVertex3f curve[0].[](0), curve[0].[](1) ,0
       glVertex3f curve[1].[](0), curve[1].[](1) ,0
@@ -33,8 +30,8 @@ class Curve
     end
   end
   
-  def is_flat? curve
-    tol = 0.2
+  def self.is_flat? curve
+    tol = 10
     a = 3.0 * curve[1] - 2.0 * curve[0] - curve[3]
     b = 3.0 * curve[2] - curve[0] - 2.0 * curve[3]
     ax = a.[](0) * a.[](0)
@@ -45,7 +42,7 @@ class Curve
     ([ax, bx].max + [ay, by].max) <= tol
   end
   
-  def subdivide c
+  def self.subdivide c
     first_midpoints = midpoints c 
     second_midpoints = midpoints first_midpoints 
     third_midpoints = midpoints second_midpoints 
@@ -54,7 +51,7 @@ class Curve
      [third_midpoints[0], second_midpoints[1], first_midpoints[2], c[3]]]
   end
   
-  def midpoints point_list
+  def self.midpoints point_list
     midpoint = proc {|p, q|  (p + q) / 2 }
     final = []
     (point_list.size - 1).times do |i|
