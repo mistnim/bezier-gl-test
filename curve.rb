@@ -34,7 +34,7 @@ class Curve
   private
   
   def self.is_flat? curve
-    tol = 10
+    tol = 50
     a = 3.0 * curve[1] - 2.0 * curve[0] - curve[3]
     b = 3.0 * curve[2] - curve[0] - 2.0 * curve[3]
     ax = a.[](0) * a.[](0)
