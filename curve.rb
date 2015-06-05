@@ -20,13 +20,16 @@ class Curve
   private
   
   def self.draw_segment curve
-    glBegin GL_LINES do
+    if curve.size == 4
       glVertex3f curve[0].[](0), curve[0].[](1) ,0
       glVertex3f curve[1].[](0), curve[1].[](1) ,0
       glVertex3f curve[1].[](0), curve[1].[](1) ,0
       glVertex3f curve[2].[](0), curve[2].[](1) ,0
       glVertex3f curve[2].[](0), curve[2].[](1) ,0
       glVertex3f curve[3].[](0), curve[3].[](1) ,0
+    else
+      glVertex3f curve[0].[](0), curve[0].[](1) ,0
+      glVertex3f curve[1].[](0), curve[1].[](1) ,0
     end
   end
   
