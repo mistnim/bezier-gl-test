@@ -19,14 +19,20 @@ class SVG
   private
   
   def draw_paths paths
-    paths.each {|path| SubPath.draw path}
+    paths.each do |path|
+      SubPath.draw path[0], path[1]
+    end
   end
 
   def parse_svg file_name
     paths = []
     svg = Nokogiri::XML(open(file_name))
     svg.css('path').each do |path|
-      paths << (parse_path path['d'])
+      style = path['style']
+      index = style.index('stroke:') + 'stroke:'.size
+      color_hex = style[index..index+6]
+      color = Color::RGB.from_html(color_hex)
+      paths << [(parse_path path['d']), color]
     end
     paths
   end
