@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-
-require_relative 'curve'
+require_relative 'svg'
 
 require 'opengl'
 require 'glu'
@@ -94,7 +93,6 @@ class Lesson3
   def draw_gl_scene
     @a = @a.next
     glClear GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
-
     glPushMatrix do
 
       glRotate -90, 1, 0, 0
@@ -109,24 +107,26 @@ class Lesson3
       
       glPushMatrix do
         # glRotate 180, 1, 0, 0
-        draw_floor
+        #draw_floor
       end
 
       glPushMatrix do
-        glTranslatef 0,0,5
-        glRotatef 90, 1,0,0
+        #glutSolidSphere 1, 20,20
+
+        glRotatef -90, 1,0,0
+        glScalef 0.05, 0.05, 0.05
         60.times do
-          glTranslatef 0,0,1
-          glCallList @index
+          glRotate 10,1,0,0
+          @svg.draw
         end
       end
 
       glPushMatrix do
-        glTranslatef 0,0,1
-        glRotatef @a, 1,0,0
+        #glTranslatef 0,0,1
+        #glRotatef @a, 1,0,0
         @c = @c.adjust_hue -0.1
         glColor3f *@c.to_a
-        glutSolidSphere 2.0, 20, 20
+        #glutSolidSphere 2.0, 20, 20
         end
     end
 
@@ -153,7 +153,7 @@ class Lesson3
   def initialize
     @a = 0
     @window = nil
-    @c = Color::RGB::DeepPink
+    @c = Color::RGB::Yellow
 
     a = Vector.[] 0.0,0.0
     b = Vector.[] 2.0,10.0
@@ -176,12 +176,14 @@ class Lesson3
     glutKeyboardFunc :keyboard
 
     @index = glGenLists 1
-    @curve.compile_list @index
+    @svg = SVG.new 'images/drawing.svg', @index
 
     init_gl_window WIDTH, HEIGHT
     
     glutMainLoop
   end
 end
+
+
 
 Lesson3.new
