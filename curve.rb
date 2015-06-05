@@ -17,8 +17,6 @@ class Curve
     end
   end
 
-  private
-  
   def self.draw_segment curve
     if curve.size == 4
       glVertex3f curve[0].[](0), curve[0].[](1) ,0
@@ -32,6 +30,8 @@ class Curve
       glVertex3f curve[1].[](0), curve[1].[](1) ,0
     end
   end
+
+  private
   
   def self.is_flat? curve
     tol = 10
