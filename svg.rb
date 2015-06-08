@@ -20,7 +20,7 @@ class SVG
   
   def draw_paths paths
     paths.each do |path|
-      SubPath.draw path[0], path[1]
+      SubPath.draw *path
     end
   end
 
