@@ -120,24 +120,32 @@ class Lesson3
 
     end
 
-        glRotatef -90, 1,0,0
-        glScalef 0.05, 0.05, 0.05
-        60.times do
-          glRotate 10,1,0,0
-          @svg.draw
-        end
-      end
+    # display the HUD
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glDisable(GL_LIGHTING)
+    glLoadIdentity();
+    glOrtho(0.0, WIDTH, HEIGHT, 0.0, -1.0, 10.0);
+    glMatrixMode(GL_MODELVIEW);
 
+    glLoadIdentity();
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    @score.times do |i|
       glPushMatrix do
-        #glTranslatef 0,0,1
-        #glRotatef @a, 1,0,0
-        @c = @c.adjust_hue -0.1
-        glColor3f *@c.to_a
-        #glutSolidSphere 2.0, 20, 20
-        end
+        glTranslatef 5 + i*70, 5, 0
+        glScalef 0.3, 0.3, 0.3
+        @ruby.draw
+      end
     end
 
-    # Swap buffers for display
+    # Making sure we can render 3d again
+    glEnable(GL_LIGHTING)
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    # Swap buers or display
     glutSwapBuffers
   end
 
