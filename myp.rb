@@ -52,12 +52,12 @@ class Lesson3
     # Set specular for all the objects
     #glMaterialfv GL_FRONT, GL_SPECULAR, WHITE.to_a
     #glMaterialf(GL_FRONT, GL_SHININESS , 128);
-    
+
     glEnable GL_LIGHTING
     glEnable GL_LIGHT0
 
     glMatrixMode GL_MODELVIEW
-    
+
     glFogi(GL_FOG_MODE, GL_LINEAR);        # Fog Mode
     glFogfv(GL_FOG_COLOR, [*BLACK.to_a, 1]);            # Set Fog Color
     glFogf(GL_FOG_DENSITY, 0.35);              # How Dense Will The Fog Be
@@ -96,7 +96,7 @@ class Lesson3
         glRotatef -90, 1, 0, 0
         glScalef 0.05, 0.05, 0.05
         glRotatef 36, 0,1,0
-        @ruby.draw 
+        @ruby.draw
       end
     end
   end
@@ -112,7 +112,7 @@ class Lesson3
     end
     @rubies.delete nil
   end
-    
+
   def initialize_forest
     @forest = Array.new
     bad_tries = 0
@@ -147,12 +147,12 @@ class Lesson3
         glScalef 0.1, 0.1, 0.1
         10.times do
           glRotatef 36, 0,1,0
-          tree.draw 
+          tree.draw
         end
       end
     end
   end
-  
+
   def rect x1, y1, x2, y2, t_id
     glBegin GL_QUADS do
       glNormal3f 0, 0, 1
@@ -166,7 +166,7 @@ class Lesson3
   def draw_floor
     rect -20, -20, 20, 20, 0
   end
-  
+
   def draw_gl_scene
     new_time = Time.now
     delta = @old_time ? (new_time - @old_time) : 0
@@ -184,7 +184,7 @@ class Lesson3
       gluLookAt *@player.look_at
       #sglTranslatef 0,0,-20
       glLightfv GL_LIGHT0, GL_POSITION, [2, -2, 2, 0]
-      
+
       glColor3f *@c.to_a
       glPushMatrix do
         glTranslatef 10000,-4,0
@@ -271,7 +271,7 @@ class Lesson3
     @score = 5
     @mouse_x_mov = 0.0
     @mouse_y_mov = 0.0
-    
+
     @window = nil
     @c = Color::RGB::Yellow
     @player = Player.new -100, -100, 45, 0
@@ -279,10 +279,10 @@ class Lesson3
     b = Vector.[] 2.0, 10.0
     c = Vector.[] 4.0, 10.0
     d = Vector.[] 6.0, 0.0
-    
+
     cc = [a,b,c,d]
     @curve = Curve.new *cc
-    
+
     # Initliaze our GLUT code
     glutInit
     # Setup a double buffer, RGBA color, alpha components and depth buffer
