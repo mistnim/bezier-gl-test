@@ -19,6 +19,8 @@ include Glut
 WIDTH = 800
 HEIGHT = 600
 
+AREA = 700 #for the forest
+
 BLACK = Color::RGB::Black
 WHITE = Color::RGB::White
 SPECULAR_AND_DIFFUSE = WHITE
@@ -76,10 +78,81 @@ class Lesson3
     glMatrixMode GL_PROJECTION
     glLoadIdentity
 
-    gluPerspective 45.0, width.to_f / height, 0.1, 100.0
+    gluPerspective 45.0, width.to_f / height, 0.1, 1000.0
     glMatrixMode GL_MODELVIEW
   end
 
+  def initialize_rubies
+    @rubies = Array.new
+    @score.times do
+      @rubies << [rand(AREA), rand(AREA)]
+    end
+  end
+
+  def draw_rubies
+    @rubies.each do |i|
+      glPushMatrix do
+        glTranslatef i[0], i[1], 10
+        glRotatef -90, 1, 0, 0
+        glScalef 0.05, 0.05, 0.05
+        glRotatef 36, 0,1,0
+        @ruby.draw 
+      end
+    end
+  end
+
+  def check_rubies
+    @rubies.map! do |i|
+      if (@player.pos_x - i[0]).abs < 30 and (@player.pos_y - i[1]).abs < 30
+        @score-= 1
+        ret = nil
+      else
+        ret = i
+      end
+    end
+    @rubies.delete nil
+  end
+    
+  def initialize_forest
+    @forest = Array.new
+    bad_tries = 0
+    loop do
+      break if bad_tries > 3
+      too_close = false
+      try = [rand(AREA), rand(AREA)]
+      @forest.each do |i|
+        if (try[0] - i[0]).abs < 70 and (try[1] - i[1]).abs < 70
+          too_close = true
+        end
+      end
+      if too_close
+        bad_tries += 1
+      else
+        @forest << [try[0], try[1], rand(2)]
+        bad_tries = 0
+      end
+    end
+  end
+
+  def draw_forest
+    @forest.each do |i|
+      if i[2] == 0
+        tree = @tree1
+      else
+        tree = @tree2
+      end
+      glPushMatrix do
+        glTranslatef i[0], i[1], 0
+        glRotatef -90, 1, 0, 0
+        glScalef 0.1, 0.1, 0.1
+        10.times do
+          glRotatef 36, 0,1,0
+          tree.draw 
+        end
+      end
+    end
+  end
+  
   def rect x1, y1, x2, y2, t_id
     glBegin GL_QUADS do
       glNormal3f 0, 0, 1
@@ -117,6 +190,9 @@ class Lesson3
         glTranslatef 10000,-4,0
         glutSolidSphere 1, 20,20
       end
+      check_rubies
+      draw_forest
+      draw_rubies
 
     end
 
@@ -218,16 +294,19 @@ class Lesson3
     glutDisplayFunc :draw_gl_scene
     glutReshapeFunc :reshape
     glutKeyboardFunc :keyboard
-
-    @index = glGenLists 1
-    @svg = SVG.new 'images/drawing.svg', @index
-
+    glutKeyboardUpFunc :keyboard_up
+    glutPassiveMotionFunc :mouse_passive_motion
+    glutIgnoreKeyRepeat 1
+    glutSetCursor GLUT_CURSOR_NONE
+    @index = glGenLists 3
+    @ruby = SVG.new 'images/ruby.svg', @index
+    @tree1 = SVG.new 'images/tree1.svg', @index + 1
+    @tree2 = SVG.new 'images/tree2.svg', @index + 2
+    initialize_forest
+    initialize_rubies
     init_gl_window WIDTH, HEIGHT
-    
     glutMainLoop
   end
 end
-
-
 
 Lesson3.new
