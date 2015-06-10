@@ -22,7 +22,7 @@ HEIGHT = 600
 BLACK = Color::RGB::Black
 WHITE = Color::RGB::White
 SPECULAR_AND_DIFFUSE = WHITE
-AMBIENT = Color::RGB.new(20,20,20)
+AMBIENT = Color::RGB.new(90,90,90)
 
 class Lesson3
   def init_gl_window width = 640, height = 480
