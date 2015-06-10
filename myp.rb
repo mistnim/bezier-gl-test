@@ -54,12 +54,15 @@ class Lesson3
     glEnable GL_LIGHTING
     glEnable GL_LIGHT0
 
-    glMatrixMode GL_PROJECTION
-    glLoadIdentity
-    # Calculate aspect ratio of the window
-    gluPerspective 45.0, width / height, 0.1, 100.0
-
     glMatrixMode GL_MODELVIEW
+    
+    glFogi(GL_FOG_MODE, GL_LINEAR);        # Fog Mode
+    glFogfv(GL_FOG_COLOR, [*BLACK.to_a, 1]);            # Set Fog Color
+    glFogf(GL_FOG_DENSITY, 0.35);              # How Dense Will The Fog Be
+    glHint(GL_FOG_HINT, GL_DONT_CARE);          # Fog Hint Value
+    glFogf(GL_FOG_START, 100.0);             # Fog Start Depth
+    glFogf(GL_FOG_END, 500.0);               # Fog End Depth
+    glEnable(GL_FOG);                   # Enables GL_FOG
 
     draw_gl_scene
   end
