@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 require_relative 'svg'
+require_relative 'player'
 
 require 'opengl'
 require 'glu'
@@ -91,27 +92,30 @@ class Lesson3
   end
   
   def draw_gl_scene
-    @a = @a.next
+    new_time = Time.now
+    delta = @old_time ? (new_time - @old_time) : 0
+    @old_time = new_time
+
+
+    mouse_x_mov = 0             # camera updated, movements is now zero
+    mouse_y_mov = 0
+    @player.move delta
+    @player.update_camera delta, @mouse_x_mov, @mouse_y_mov
     glClear GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
+
     glPushMatrix do
 
-      glRotate -90, 1, 0, 0
-
-      glTranslatef 0.0, 80.0, -3.0
-      glRotate @a, 0, 0, 1
-      glPushMatrix do
-        glLightfv GL_LIGHT0, GL_POSITION, [2,-2,2,1]
-      end
+      gluLookAt *@player.look_at
+      #sglTranslatef 0,0,-20
+      glLightfv GL_LIGHT0, GL_POSITION, [2, -2, 2, 0]
       
       glColor3f *@c.to_a
-      
       glPushMatrix do
-        # glRotate 180, 1, 0, 0
-        #draw_floor
+        glTranslatef 10000,-4,0
+        glutSolidSphere 1, 20,20
       end
 
-      glPushMatrix do
-        #glutSolidSphere 1, 20,20
+    end
 
         glRotatef -90, 1,0,0
         glScalef 0.05, 0.05, 0.05
@@ -141,8 +145,15 @@ class Lesson3
 
   # Keyboard handler to exit when ESC is typed
   def keyboard key, x, y
-    p key
     case key
+    when 'e'
+      @player.up = true
+    when 'd'
+      @player.down = true
+    when 'f'
+      @player.right = true
+    when 's'
+      @player.left = true
     when 'q'
       glutDestroyWindow @window
       exit(0)
@@ -150,19 +161,41 @@ class Lesson3
     glutPostRedisplay
   end
 
+  def keyboard_up key, x, y
+    case key
+    when 'e'
+      @player.up = false
+    when 'd'
+      @player.down = false
+    when 'f'
+      @player.right = false
+    when 's'
+      @player.left = false
+    end
+  end
+
+  def mouse_passive_motion x, y
+    @mouse_x_mov = x - WIDTH / 2
+    @mouse_y_mov = y - HEIGHT / 2
+    glutWarpPointer WIDTH / 2, HEIGHT / 2 unless x == (WIDTH / 2) and y == (HEIGHT / 2)
+  end
+
   def initialize
-    @a = 0
+    @score = 5
+    @mouse_x_mov = 0.0
+    @mouse_y_mov = 0.0
+    
     @window = nil
     @c = Color::RGB::Yellow
-
-    a = Vector.[] 0.0,0.0
-    b = Vector.[] 2.0,10.0
-    c = Vector.[] 4.0,10.0
-    d = Vector.[] 6.0,0.0
+    @player = Player.new -100, -100, 45, 0
+    a = Vector.[] 0.0, 0.0
+    b = Vector.[] 2.0, 10.0
+    c = Vector.[] 4.0, 10.0
+    d = Vector.[] 6.0, 0.0
     
     cc = [a,b,c,d]
     @curve = Curve.new *cc
-
+    
     # Initliaze our GLUT code
     glutInit
     # Setup a double buffer, RGBA color, alpha components and depth buffer
