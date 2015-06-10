@@ -29,9 +29,13 @@ class SVG
     svg = Nokogiri::XML(open(file_name))
     svg.css('path').each do |path|
       style = path['style']
-      index = style.index('stroke:') + 'stroke:'.size
-      color_hex = style[index..index+6]
-      color = Color::RGB.from_html(color_hex)
+      if style.index('stroke:')
+        index = style.index('stroke:') + 'stroke:'.size
+        color_hex = style[index..index+6]
+        color = Color::RGB.from_html(color_hex)
+      else
+        color = Color::RGB::Blue
+      end
       paths << [(parse_path path['d']), color]
     end
     paths
